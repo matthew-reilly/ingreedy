@@ -15,6 +15,7 @@ module Ingreedy
       :container_amount,
       :container_unit,
       :ingredient,
+      :detail,
       :original_query,
     )
 
@@ -23,6 +24,7 @@ module Ingreedy
     end
 
     def parse
+      print original_query
       result = Result.new
       result.original_query = original_query
 
@@ -43,6 +45,8 @@ module Ingreedy
       result.container_unit = convert_unit_variation_to_canonical(
         parslet[:container_unit].to_s,
       ) if parslet[:container_unit]
+
+      result.detail = parslet[:detail].to_s.lstrip.rstrip # TODO: hack
 
       result.ingredient = parslet[:ingredient].to_s.lstrip.rstrip # TODO: hack
 

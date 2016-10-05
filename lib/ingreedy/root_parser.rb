@@ -78,9 +78,23 @@ module Ingreedy
       amount_and_unit | unit_and_preposition
     end
 
+    rule(:detail) do
+      str(", ").maybe >>
+          match['[:alnum:]'].repeat.as(:detail)
+    end
+
+    rule(:phrase) do
+      whitespace.maybe >> match['[:alnum:]'] >> whitespace.maybe
+    end
+
+    rule(:ingredient) do
+      whitespace.maybe >> phrase.repeat.as(:ingredient) >> whitespace.maybe
+    end
+
     rule(:standard_format) do
       # e.g. 1/2 (12 oz) can black beans
-      quantity >> any.repeat.as(:ingredient)
+
+      quantity >> ingredient >> detail
     end
 
     rule(:reverse_format) do

@@ -12,8 +12,9 @@ module Ingreedy
   end
 
   def self.parse(query)
+    print query
     parser = Parser.new(query)
-    parser.parse
+    print parser.parse
   rescue Parslet::ParseFailed => e
     fail ParseFailed.new(e.message), e.backtrace
   end
@@ -22,3 +23,5 @@ module Ingreedy
     @dictionaries ||= DictionaryCollection.new
   end
 end
+
+Ingreedy.parse(ARGV[0])
