@@ -12,11 +12,10 @@ module Ingreedy
   end
 
   def self.parse(query)
-    print query
     parser = Parser.new(query)
     print parser.parse
   rescue Parslet::ParseFailed => e
-    fail ParseFailed.new(e.message), e.backtrace
+    fail ParseFailed.new(e.message)
   end
 
   def self.dictionaries
