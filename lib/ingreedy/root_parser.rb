@@ -78,13 +78,33 @@ module Ingreedy
       amount_and_unit | unit_and_preposition
     end
 
+    rule(:space)      { match('\s').repeat(1) }
+    rule(:space?)     { space.maybe }
+
     rule(:detail) do
       str(", ").maybe >>
-          match['[:alnum:]'].repeat.as(:detail)
+          match['[:alnum:]'].repeat(1).as(:detail)
     end
 
+    rule(:name) { str(', ').maybe >> match['[:alnum:]'].repeat >> str(', ').maybe }
+
+    rule(:names) {
+
+      whitespace.maybe >>
+
+          str('(').maybe >>
+          str(', ').maybe >>
+          (match['[:alnum:]'] >>
+              (str(', ').maybe >>
+                  space? >>
+                  match['[:alnum:]'] >>
+                  space?).repeat.maybe).maybe.as(:detail) >>
+          str(')').maybe
+    }
+
+
     rule(:phrase) do
-      whitespace.maybe >> match['[:alnum:]'] >> whitespace.maybe
+      whitespace.maybe >> match['[:alnum:]'] >> whitespace.maybe >> match("[-!]").maybe
     end
 
     rule(:ingredient) do
@@ -94,7 +114,7 @@ module Ingreedy
     rule(:standard_format) do
       # e.g. 1/2 (12 oz) can black beans
 
-      quantity >> ingredient >> detail
+      quantity.maybe >> ingredient >> names.maybe
     end
 
     rule(:reverse_format) do

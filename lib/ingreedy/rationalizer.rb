@@ -15,7 +15,7 @@ module Ingreedy
       if Ingreedy.preserve_amounts
         (normalized_word || compound_fraction || @float || @integer)
       else
-        (normalized_word || rationalized_fraction || rationalized_float || @integer).to_r
+        (normalized_word || rationalized_fraction || rationalized_float || @integer)
       end
     end
 
@@ -37,13 +37,13 @@ module Ingreedy
     def rationalized_fraction
       return unless @fraction
       result = normalized_fraction
-      result = result.to_r + @integer.to_i
-      result
+
+      result.to_frac
     end
 
     def compound_fraction
       return unless @fraction
-      "#{@integer} #{normalized_fraction}".strip
+      "#{@integer}".strip
     end
 
     def rationalized_float
@@ -52,3 +52,13 @@ module Ingreedy
     end
   end
 end
+
+
+class String
+  def to_frac
+    numerator, denominator = split('/').map(&:to_f)
+    denominator ||= 1
+    numerator/denominator
+  end
+end
+

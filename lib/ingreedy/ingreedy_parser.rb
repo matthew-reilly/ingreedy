@@ -30,11 +30,8 @@ module Ingreedy
 
       parslet = RootParser.new(original_query).parse
 
-      result.amount = rationalize parslet[:amount]
-      result.amount = [
-        result.amount,
-        rationalize(parslet[:amount_end]),
-      ] if parslet[:amount_end]
+      result.amount = rationalize(parslet[:amount])
+
 
       result.container_amount = rationalize(parslet[:container_amount])
 
@@ -46,7 +43,7 @@ module Ingreedy
         parslet[:container_unit].to_s,
       ) if parslet[:container_unit]
 
-      result.detail = parslet[:detail].to_s.lstrip.rstrip # TODO: hack
+      result.detail = parslet[:detail].to_s.lstrip.rstrip.split(', ') # TODO: hack
 
       result.ingredient = parslet[:ingredient].to_s.lstrip.rstrip # TODO: hack
 
