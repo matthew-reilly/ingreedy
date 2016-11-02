@@ -24,7 +24,6 @@ module Ingreedy
     end
 
     def parse
-      print original_query
       result = Result.new
       result.original_query = original_query
 

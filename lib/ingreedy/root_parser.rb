@@ -80,13 +80,37 @@ module Ingreedy
 
     rule(:space)      { match('\s').repeat(1) }
     rule(:space?)     { space.maybe }
-
-    rule(:detail) do
-      str(", ").maybe >>
-          match['[:alnum:]'].repeat(1).as(:detail)
-    end
+    #
+    # rule(:detail) do
+    #   str(", ").maybe >>
+    #       match['[:alnum:]'].repeat(1).as(:detail)
+    # end
 
     rule(:name) { str(', ').maybe >> match['[:alnum:]'].repeat >> str(', ').maybe }
+
+
+
+    rule(:spaces) { match('\s').repeat(1) }
+    # at least 1 space character (space, tab, new line, carriage return)
+
+    rule(:spaces?) { spaces.maybe }
+    # a bunch of spaces or not
+
+
+    rule(:comma) { spaces? >> str(',') >> spaces? }
+
+    rule(:value) {
+      phrase  |
+          array
+    }
+
+
+    rule(:array) {
+      str('(') >> spaces? >>
+          (value >> (comma >> value).repeat).maybe.as(:detail) >>
+          spaces? >> str(')')
+    }
+
 
     rule(:names) {
 
@@ -97,14 +121,15 @@ module Ingreedy
           (match['[:alnum:]'] >>
               (str(', ').maybe >>
                   space? >>
-                  match['[:alnum:]'] >>
+                  phrase >>
                   space?).repeat.maybe).maybe.as(:detail) >>
           str(')').maybe
     }
 
 
+
     rule(:phrase) do
-      whitespace.maybe >> match['[:alnum:]'] >> whitespace.maybe >> match("[-!]").maybe
+      whitespace.maybe >> match['[:alnum:]'] >> whitespace.maybe >> match("[-!/&]").maybe
     end
 
     rule(:ingredient) do
@@ -114,8 +139,9 @@ module Ingreedy
     rule(:standard_format) do
       # e.g. 1/2 (12 oz) can black beans
 
-      quantity.maybe >> ingredient >> names.maybe
+      quantity.maybe >> ingredient >> names.maybe >> array.maybe
     end
+
 
     rule(:reverse_format) do
       # e.g. flour 200g
