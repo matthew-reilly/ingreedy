@@ -13,7 +13,7 @@ module Ingreedy
 
   def self.parse(query)
     parser = Parser.new(query)
-    print parser.parse
+    parser.parse
   rescue Parslet::ParseFailed => e
     print e.message
     fail ParseFailed.new(e.message)
@@ -24,4 +24,4 @@ module Ingreedy
   end
 end
 
-Ingreedy.parse(ARGV[0])
+#Ingreedy.parse(ARGV[0])

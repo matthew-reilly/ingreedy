@@ -42,7 +42,7 @@ module Ingreedy
         parslet[:container_unit].to_s,
       ) if parslet[:container_unit]
 
-      result.detail = parslet[:detail].to_s.lstrip.rstrip.split(', ') # TODO: hack
+      result.detail = parslet[:detail].to_s.lstrip.rstrip.split(', ') + parslet[:detail2].to_s.lstrip.rstrip.split(', ')# TODO: hack
 
       result.ingredient = parslet[:ingredient].to_s.lstrip.rstrip # TODO: hack
 

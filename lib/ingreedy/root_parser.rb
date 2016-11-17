@@ -106,9 +106,15 @@ module Ingreedy
 
 
     rule(:array) {
-      str('(') >> spaces? >>
-          (value >> (comma >> value).repeat).maybe.as(:detail) >>
-          spaces? >> str(')')
+      whitespace.maybe >>
+
+          str('(').maybe >>
+          (match['[:alnum:]'] >>
+              (str('(').maybe >>
+                  space? >>
+                  phrase >>
+                  space?).repeat.maybe).maybe.as(:detail2) >>
+      str(')').maybe
     }
 
 
@@ -116,20 +122,18 @@ module Ingreedy
 
       whitespace.maybe >>
 
-          str('(').maybe >>
           str(', ').maybe >>
           (match['[:alnum:]'] >>
               (str(', ').maybe >>
                   space? >>
                   phrase >>
-                  space?).repeat.maybe).maybe.as(:detail) >>
-          str(')').maybe
+                  space?).repeat.maybe).maybe.as(:detail)
     }
 
 
 
     rule(:phrase) do
-      whitespace.maybe >> match['[:alnum:]'] >> whitespace.maybe >> match("[-!/&]").maybe
+      whitespace.maybe >> match['[:alnum:]'] >> whitespace.maybe >> match("[-!/&+*%]").maybe
     end
 
     rule(:ingredient) do

@@ -41,6 +41,7 @@
     - "tbsp"
     - "T"
     - "T."
+    - "Tbps."
     - "tablespoon"
     - "tablespoons"
     - "tbs."
@@ -92,9 +93,16 @@
   :pinch:
     - "pinch"
     - "pinches"
+  :half:
+      - "half"
+      - "one half"
+      - "half of a"
   :dash:
     - "dash"
     - "dashes"
+  :inch:
+      - "inch"
+      - "-inch"
   :touch:
     - "touch"
     - "touches"
